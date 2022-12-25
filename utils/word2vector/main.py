@@ -2,9 +2,8 @@ from gensim.models import Word2Vec
 import time
 
 
-# 读取数据集
 def read_txt():
-    with open("/Users/chenyn/chenyn's/研究生/DataSet/My dect/word2vector/corpus/corpus.txt") as f:
+    with open("../CoCC/word2vector/corpus/corpus.txt") as f:
         raw_text = f.read()
         sentences = [sentence.replace('\n', '') for sentence in raw_text.split('.') if
                      (sentence.replace('\n', '')) != ' ' and
