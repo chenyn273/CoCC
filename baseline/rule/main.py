@@ -106,7 +106,7 @@ def traverse_folder(filepath):
                 TN += 1
 
 
-traverse_folder("features_path")
+traverse_folder("../features")
 
 print('-------------- result --------------')
 print(TP)
