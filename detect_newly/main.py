@@ -156,12 +156,7 @@ def detect_newly():
     rfc_pre = rfc.predict(xtest)
     xgb_pre = xgb.predict(xtest)
     to_dect_pre = rfc.predict(to_dect_x)
-    print('to_dect:\t', precision_score(to_dect_y, to_dect_pre), f1_score(to_dect_y, to_dect_pre),
-          recall_score(to_dect_y, to_dect_pre))
-    print(sum(to_dect_pre == 1))
-    print(len(to_dect_pre))
-    print(to_dect.iloc[to_dect_pre == 1])
-    print(len(to_dect.iloc[to_dect_pre == 1]))
+
     with open('detected_outdated.txt', 'a') as f:
         f.write(str(to_dect.iloc[to_dect_pre == 1].filename))
 
