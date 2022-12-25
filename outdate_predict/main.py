@@ -21,8 +21,8 @@ from xgboost import XGBClassifier
 
 import matplotlib.pyplot as plt
 
-block = pd.read_csv("/Users/chenyn/chenyn's/研究生/DataSet/My dect/csv/block.csv")
-method = pd.read_csv("/Users/chenyn/chenyn's/研究生/DataSet/My dect/csv/method.csv")
+block = pd.read_csv("../csv/block.csv")
+method = pd.read_csv("../csv/method.csv")
 block_method = pd.concat([block, method], axis=0)
 # ------------------------ new version ------------------------
 block_new = block.drop(
