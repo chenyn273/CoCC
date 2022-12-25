@@ -14,11 +14,17 @@ RQ4：RQ4用到的数据集，包含ejbca、freecol、opennms三个项目，其�
 运行classifiers文件夹下main.py
 ## utils
 1.convert_co_CCSet，用来从原始commit生成CCSet的工具
+
 2.get_change，用来从CCSet提取变更的工具
+
 3.extract_features，用来提取特征的工具
+
 4.generate_table，用来生成csv文件的工具
+
 5.data_analyse_tool，用来分析数据集的工具
+
 6.drop_duplicates_tool，用来对原始数据去重的工具
+
 7.word2vector，用来训练词向量的工具
 ## Baseline
 *基于规则的baseline：*
