@@ -25,5 +25,7 @@ RQ4：RQ4用到的数据集，包含ejbca、freecol、opennms三个项目，其�
 将资源包中的features放到CoCC代码目录下，然后运行baseline/rule/main.py
 *OCD*
 打开CoCC/baseline/OCD文件夹，将OCD.zip和ocd_data.zip解压到当前目录，然后命令行运行
+
 python -m infer --log-dir OCD --config configs/OCD.yml
+
 python -m eval --log-dir OCD --config configs/OCD.yml
