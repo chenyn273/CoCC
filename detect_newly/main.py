@@ -21,13 +21,13 @@ from xgboost import XGBClassifier
 
 import matplotlib.pyplot as plt
 
-ejbca = pd.read_csv("/Users/chenyn/chenyn's/研究生/DataSet/My dect/RQ4/ejbca.csv")
-freecol = pd.read_csv("/Users/chenyn/chenyn's/研究生/DataSet/My dect/RQ4/freecol.csv")
-opennms = pd.read_csv("/Users/chenyn/chenyn's/研究生/DataSet/My dect/RQ4/opennms.csv")
+ejbca = pd.read_csv("../RQ4/ejbca.csv")
+freecol = pd.read_csv("../RQ4/freecol.csv")
+opennms = pd.read_csv("../RQ4/opennms.csv")
 to_dect = pd.concat([ejbca, freecol, opennms], axis=0)
 
-block = pd.read_csv("/Users/chenyn/chenyn's/研究生/DataSet/My dect/csv/block.csv")
-method = pd.read_csv("/Users/chenyn/chenyn's/研究生/DataSet/My dect/csv/method.csv")
+block = pd.read_csv("../csv/block.csv")
+method = pd.read_csv("../csv/method.csv")
 block_method = pd.concat([block, method], axis=0)
 # ------------------------ new version ------------------------
 to_dect = to_dect.drop(
