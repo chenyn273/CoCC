@@ -13,11 +13,11 @@ OCD.zip：Trained OCD model
 ocd_data.zip：The data set used for the baseline OCD is the same as the data set used in our project, but the input form is different.
 
 RQ4：The dataset used in RQ4 includes ejbca, freecol and opennms, among which detected_ Outdated.txt is the list of obsolete comment files detected, which can be found in the *feature folder respectively.  *git folder saves the original git clone file of the project
-## 训练并测试模型
+## Train and test the model
 Run /outdate_predict/main.py
 
 This includes grid search, which takes a long time
-## 分类器比较及校准
+## Classifier comparison and calibration
 Run /classifiers/main.py
 ## utils
 1.convert_co_CCSet，Tool used to generate CCSet from original commit
