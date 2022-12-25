@@ -40,7 +40,8 @@ Put the folder "features" in resource package in the CoCC code directory, and th
 
 **OCD**
 Open the CoCC/baseline/OCD folder, and unzip OCD.zip and ocd_data.zip to the current directory, and then run the follow in the command line
-
+```python
 python -m infer --log-dir OCD --config configs/OCD.yml
 
 python -m eval --log-dir OCD --config configs/OCD.yml
+```
