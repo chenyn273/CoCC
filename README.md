@@ -36,6 +36,7 @@ Run /classifiers/main.py
 ## Baseline
 *rule based baseline：*
 Put the folder "features" in resource package in the CoCC code directory, and then run baseline/rule/main.py
+
 *OCD*
 Open the CoCC/baseline/OCD folder, and unzip OCD.zip and ocd_data.zip to the current directory, and then run the follow in the command line
 
