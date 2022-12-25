@@ -3,9 +3,13 @@ The replication package of paper _Are your comments outdated? Towards automatic
 谷歌云盘链接：
 *资源说明*
 features：包含已经处理过的method和block类型的CCSet数据集，您可以在这里查看我们用到的数据集。
+
 word2vector：包含词向量训练语料库及训练好的词向量模型
+
 OCD.zip：训练好的OCD模型
-ocd_data.zip：用来做baseline OCD的数据集，与我们项目用的数据集是同一个，
+
+ocd_data.zip：用来做baseline OCD的数据集，与我们项目用的数据集是同一个，仅输入形式不同。
+
 RQ4：RQ4用到的数据集，包含ejbca、freecol、opennms三个项目，其中detected_outdated.txt是检测出的过时注释文件列表，他们可以分别在*.feature文件夹中找到。\*.git文件夹保存了项目原始的git clone文件
 ## 训练并测试模型
 运行outdated_predict文件夹下main.py
