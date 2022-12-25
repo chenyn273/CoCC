@@ -1,18 +1,19 @@
-The replication package of paper _Are your comments outdated? Towards automatically detecting code-comment consistency_.
+The replication package of paper _Are your comments outdated? Towards automatically detecting code-comment consistency.
+
 ## Download resource package
 Google Cloud Disk Link：
 
-*Resource Description*
+**Resource Description**
 
-features：It contains the processed CCSet datasets of method and block types. You can view the datasets we use here.
+1.features：It contains the processed CCSet datasets of method and block types. You can view the datasets we use here.
 
-word2vector：Including word vector training corpus and trained word vector model
+2.word2vector：Including word vector training corpus and trained word vector model
 
-OCD.zip：Trained OCD model
+3.OCD.zip：Trained OCD model
 
-ocd_data.zip：The data set used for the baseline OCD is the same as the data set used in our project, but the input form is different.
+4.ocd_data.zip：The dataset used for the baseline OCD is the same as the dataset used in our project, just the input form is different.
 
-RQ4：The dataset used in RQ4 includes ejbca, freecol and opennms, among which detected_ Outdated.txt is the list of obsolete comment files detected, which can be found in the *feature folder respectively.  *git folder saves the original git clone file of the project
+5.RQ4：The dataset used in RQ4 includes ejbca, freecol and opennms, among which detected_ Outdated.txt is the list of obsolete comment files detected, which can be found in the *feature folder respectively.  *git folder saves the original git clone file of the project
 ## Train and test the model
 Run /outdate_predict/main.py
 
@@ -34,10 +35,10 @@ Run /classifiers/main.py
 
 7.word2vector，Tools for training word vectors
 ## Baseline
-*rule based baseline：*
+**rule based baseline：**
 Put the folder "features" in resource package in the CoCC code directory, and then run baseline/rule/main.py
 
-*OCD*
+**OCD**
 Open the CoCC/baseline/OCD folder, and unzip OCD.zip and ocd_data.zip to the current directory, and then run the follow in the command line
 
 python -m infer --log-dir OCD --config configs/OCD.yml
