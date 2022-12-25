@@ -106,7 +106,7 @@ def traverse_folder(filepath):
                 TN += 1
 
 
-traverse_folder("/Users/chenyn/chenyn's/研究生/DataSet/My dect/data/未命名文件夹")
+traverse_folder("features_path")
 
 print('-------------- result --------------')
 print(TP)
