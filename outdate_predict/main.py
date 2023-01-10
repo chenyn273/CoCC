@@ -394,5 +394,5 @@ def random_forest_pred():
     print('F1-score:', f1_score(ytest, predicted))
     print('Precision score:', precision_score(ytest, predicted))
 
-# different_model()
-# random_forest_pred()
+different_model()
+random_forest_pred()
