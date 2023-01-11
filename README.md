@@ -14,7 +14,10 @@ Google Cloud Disk Link：https://drive.google.com/drive/folders/12xYfd8DC66OdBy3
 
 4.ocd_data.zip：The dataset used for the baseline OCD is the same as the dataset used in our project, just the input form is different.
 
-5.RQ4：The dataset used in RQ4 includes ejbca, freecol and opennms, among which detected_ Outdated.txt is the list of obsolete comment files detected, which can be found in the *feature folder respectively.  *git folder saves the original git clone file of the project
+5.RQ5：The dataset used in RQ4 includes ejbca, freecol and opennms, among which detected_ Outdated.txt is the list of obsolete comment files detected, which can be found in the *feature folder respectively.  *git folder saves the original git clone file of the project
+
+6.python_raw_ccset: Manually collected python dataset for RQ4.
+
 ## Train and test the model
 Run /outdate_predict/main.py
 
