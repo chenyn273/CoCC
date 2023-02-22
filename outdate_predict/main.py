@@ -3,8 +3,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
+
 import numpy as np
 import scipy
 import pandas as pd
@@ -18,21 +17,29 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 from sklearn.utils import shuffle
 from xgboost import XGBClassifier
+import seaborn as sns
 
 import matplotlib.pyplot as plt
 
 block = pd.read_csv("../csv/block.csv")
 method = pd.read_csv("../csv/method.csv")
+top = pd.read_csv('block_method_top.csv')
 block_method = pd.concat([block, method], axis=0)
 # ------------------------ new version ------------------------
 block_new = block.drop(
-    ['lineNumOfOldCode', 'lineNumOfOldComment', 'lineNumOfChanged', 'cmt2cd_sim_before', 'cmt2cd_sim_after'], axis=1)
+    ['lineNumOfOldCommentBylineNumOf"OldCCSet', 'lineNumOfOldCode', 'lineNumOfOldComment', 'lineNumOfChanged',
+     'cmt2cd_sim_before', 'cmt2cd_sim_after'], axis=1)
 method_new = method.drop(
-    ['lineNumOfOldCode', 'lineNumOfOldComment', 'lineNumOfChanged', 'cmt2cd_sim_before', 'cmt2cd_sim_after'], axis=1)
+    ['lineNumOfOldCommentBylineNumOf"OldCCSet', 'lineNumOfOldCode', 'lineNumOfOldComment', 'lineNumOfChanged',
+     'cmt2cd_sim_before', 'cmt2cd_sim_after'], axis=1)
 block_method_new = pd.concat([block_new, method_new], axis=0)
+remove_word_anaysis = block_method_new.drop(['NNComment', 'VBComment', 'DTComment', 'INComment', 'JJComment',
+                                             'RBComment', 'PRPComment', 'MDComment', 'LSComment', 'RPComment', 'NNCode',
+                                             'VBCode', 'DTCode', 'INCode', 'JJCode',
+                                             'RBCode', 'PRPCode', 'MDCode', 'LSCode', 'RPCode'], axis=1)
 # code features
 code_new = block_method_new.drop(
-    ['lineNumOfOldCommentBylineNumOf"OldCCSet', 'TODOCount', 'FIXMECount', 'XXXCount', 'BUGCount',
+    ['TODOCount', 'FIXMECount', 'XXXCount', 'BUGCount',
      'VERSIONCount', 'FIXEDCount', 'NNComment', 'VBComment', 'DTComment', 'INComment', 'JJComment', 'RBComment',
      'PRPComment', 'MDComment', 'LSComment', 'RPComment', 'bothHavePairNumChange',
      'cmt2cd_sim_change', 'cmt2ch_sim_change', 'all_token_change_sim'
@@ -55,7 +62,7 @@ comment_new = block_method_new.drop(
 relation_new = block_method_new.drop(
     ['changeNum', 'attribute', 'methodDeclaration', 'methodRenaming', 'returnType', 'parameterDelete',
      'parameterInsert', 'parameterRenaming', 'parameterTypeChange', 'containReturn',
-     'lineNumOfOldCodeBylineNumOfOldCCSet', 'lineNumOfOldCommentBylineNumOf"OldCCSet',
+     'lineNumOfOldCodeBylineNumOfOldCCSet',
      'TODOCount', 'FIXMECount', 'XXXCount', 'BUGCount', 'VERSIONCount', 'FIXEDCount',
      'changedLineByAllCodeLine', 'ifInsert', 'ifUpdate', 'ifMove', 'ifDelete', 'forInsert',
      'forUpdate', 'forMove', 'forDelete', 'foreachInsert', 'foreachUpdate', 'foreachMove', 'foreachDelete',
@@ -68,6 +75,7 @@ relation_new = block_method_new.drop(
      'RBCode', 'PRPCode', 'MDCode', 'LSCode', 'RPCode'
      ], axis=1)
 # ------------------------ prev_version ------------------------
+
 block_prev = block.drop(
     ['changeNum', 'NNComment', 'VBComment', 'DTComment', 'INComment', 'JJComment', 'RBComment', 'PRPComment',
      'MDComment', 'LSComment', 'RPComment', 'NNCode', 'VBCode', 'DTCode', 'INCode', 'JJCode', 'RBCode', 'PRPCode',
@@ -112,8 +120,14 @@ relation_prev = block_method_prev.drop(
      'elseUpdate', 'elseMove', 'elseDelete'
      ], axis=1)
 # ------------ use which ------------
-
 df = block_method_new
+
+# df = df.drop(['NNComment', 'VBComment', 'DTComment', 'INComment', 'JJComment',
+#               'RBComment', 'PRPComment', 'MDComment', 'LSComment', 'RPComment', 'NNCode', 'VBCode', 'DTCode', 'INCode',
+#               'JJCode',
+#               'RBCode', 'PRPCode', 'MDCode', 'LSCode', 'RPCode'], axis=1)
+
+sns.heatmap(df.corr())
 print('-----------df.RESULT.value_counts()---------------')
 y = df.label
 print(df.label.value_counts())
@@ -127,15 +141,13 @@ xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size=0.3, random_stat
 
 def different_model():
     nbc = GaussianNB()
-    knnc = KNeighborsClassifier()
     svmc = SVC()
     lrc = LogisticRegression()
     dtc = DecisionTreeClassifier()
     rfc = RandomForestClassifier()
-    xgb = XGBClassifier()
+    xgb = XGBClassifier(objective='binary:logistic')
 
     nbc.fit(xtrain, ytrain)
-    knnc.fit(xtrain, ytrain)
     svmc.fit(xtrain, ytrain)
     lrc.fit(xtrain, ytrain)
     dtc.fit(xtrain, ytrain)
@@ -143,7 +155,6 @@ def different_model():
     xgb.fit(xtrain, ytrain)
 
     nbc_pre = nbc.predict(xtest)
-    knnc_pre = knnc.predict(xtest)
     svm_pre = svmc.predict(xtest)
     lrc_pre = lrc.predict(xtest)
     dtc_pre = dtc.predict(xtest)
@@ -153,7 +164,7 @@ def different_model():
     print('-------------------- 默认参数 --------------------')
     print('precision, f1, recall')
     print('NaiveBayes:\t', precision_score(ytest, nbc_pre), f1_score(ytest, nbc_pre), recall_score(ytest, nbc_pre))
-    print('KNN:\t', precision_score(ytest, knnc_pre), f1_score(ytest, knnc_pre), recall_score(ytest, knnc_pre))
+    # print('KNN:\t', precision_score(ytest, knnc_pre), f1_score(ytest, knnc_pre), recall_score(ytest, knnc_pre))
     print('SVM:\t', precision_score(ytest, svm_pre), f1_score(ytest, svm_pre), recall_score(ytest, svm_pre))
     print('LogisticRegression:\t', precision_score(ytest, lrc_pre), f1_score(ytest, lrc_pre),
           recall_score(ytest, lrc_pre))
@@ -162,221 +173,118 @@ def different_model():
     print('XGBoost:\t', precision_score(ytest, xgb_pre), f1_score(ytest, xgb_pre), recall_score(ytest, xgb_pre))
 
     print('-------------------- SVM网格搜索 --------------------')
-    model = SVC()
-    params = [
-        {'kernel': ['linear'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000]},
-        {'kernel': ['poly'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000], 'degree': [2, 3]},
-        {'kernel': ['rbf'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000],
-         'gamma': [1, 0.5, 0.1, 0.01, 0.001]}]
-    model = GridSearchCV(estimator=model, param_grid=params, scoring='precision', cv=10)  # precision recall f1
-    model.fit(xtrain, ytrain)
-    print("SVM_precsion模型的最优参数：", model.best_params_)
-    svm_best_model = model.best_estimator_
-    pred = svm_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, pred), f1_score(ytest, pred), recall_score(ytest, pred)
-    print('SVM precision on test:', prec)
-    print('SVM f1 on test:', f1)
-    print('SVM recall on test:', recall)
+    param_grid = {'C': [0.1, 1, 10, 100],
+                  'gamma': [0.1, 1, 10, 100],
+                  'kernel': ['linear', 'rbf']}
+    svc = SVC()
+    cv = 10
+    scoring = 'precision'
+    grid_search = GridSearchCV(svc, param_grid, cv=cv, scoring=scoring)
+    grid_search.fit(xtrain, ytrain)
+    best_model = grid_search.best_estimator_
+    best_params = grid_search.best_params_
+    print("Best parameters:", best_params)
+    print("Best score:", grid_search.best_score_)
+    print("Best model:", best_model)
 
-    model = SVC()
-    params = [
-        {'kernel': ['linear'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000]},
-        {'kernel': ['poly'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000], 'degree': [2, 3]},
-        {'kernel': ['rbf'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000],
-         'gamma': [1, 0.5, 0.1, 0.01, 0.001]}]
-    model = GridSearchCV(estimator=model, param_grid=params, scoring='accuracy', cv=10)  # precision recall f1
-    model.fit(xtrain, ytrain)
-    print("SVM_accuracy模型的最优参数：", model.best_params_)
-    svm_best_model = model.best_estimator_
-    pred = svm_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, pred), f1_score(ytest, pred), recall_score(ytest, pred)
-    print('SVM precision on test:', prec)
-    print('SVM f1 on test:', f1)
-    print('SVM recall on test:', recall)
-
-    model = SVC()
-    params = [
-        {'kernel': ['linear'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000]},
-        {'kernel': ['poly'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000], 'degree': [2, 3]},
-        {'kernel': ['rbf'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000],
-         'gamma': [1, 0.5, 0.1, 0.01, 0.001]}]
-    model = GridSearchCV(estimator=model, param_grid=params, scoring='f1', cv=10)  # precision recall f1
-    model.fit(xtrain, ytrain)
-    print("SVM_f1模型的最优参数：", model.best_params_)
-    svm_best_model = model.best_estimator_
-    pred = svm_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, pred), f1_score(ytest, pred), recall_score(ytest, pred)
-    print('SVM precision on test:', prec)
-    print('SVM f1 on test:', f1)
-    print('SVM recall on test:', recall)
-
-    model = SVC()
-    params = [
-        {'kernel': ['linear'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000]},
-        {'kernel': ['poly'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000], 'degree': [2, 3]},
-        {'kernel': ['rbf'], 'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000],
-         'gamma': [1, 0.5, 0.1, 0.01, 0.001]}]
-    model = GridSearchCV(estimator=model, param_grid=params, scoring='roc_auc', cv=10)  # precision recall f1
-    model.fit(xtrain, ytrain)
-    print("SVM_roc_auc模型的最优参数：", model.best_params_)
-    svm_best_model = model.best_estimator_
-    pred = svm_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, pred), f1_score(ytest, pred), recall_score(ytest, pred)
-    print('SVM precision on test:', prec)
-    print('SVM f1 on test:', f1)
-    print('SVM recall on test:', recall)
+    print('-------------------- GaussianNB网格搜索 --------------------')
+    param_grid = {'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]}
+    gnb = GaussianNB()
+    cv = 10
+    scoring = 'precision'
+    grid_search = GridSearchCV(gnb, param_grid, cv=cv, scoring=scoring)
+    grid_search.fit(xtrain, ytrain)
+    best_model = grid_search.best_estimator_
+    best_params = grid_search.best_params_
+    print("Best parameters:", best_params)
+    print("Best score:", grid_search.best_score_)
+    print("Best model:", best_model)
 
     print('-------------------- LogisticRegression网格搜索 --------------------')
-    lr_model = LogisticRegression()
-    lr_params = {
-        'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000],
+    param_grid = {
         'penalty': ['l1', 'l2'],
+        'C': [0.001, 0.01, 0.1, 1, 10, 100],
+        'solver': ['liblinear', 'saga']
     }
-    lr_model = GridSearchCV(estimator=lr_model, param_grid=lr_params, scoring='precision', cv=10)  # precision recall f1
-    lr_model.fit(xtrain, ytrain)
-    print("LR_precision模型的最优参数：", lr_model.best_params_)
-    lr_best_model = lr_model.best_estimator_
-    lr_pred = lr_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, lr_pred), f1_score(ytest, lr_pred), recall_score(ytest, lr_pred)
-    print('LR precision on test:', prec)
-    print('LR f1 on test:', f1)
-    print('LR recall on test:', recall)
+    lr = LogisticRegression()
+    cv = 10
+    scoring = 'precision'
+    grid_search = GridSearchCV(lr, param_grid, cv=cv, scoring=scoring)
+    grid_search.fit(xtrain, ytrain)
+    best_model = grid_search.best_estimator_
+    best_params = grid_search.best_params_
+    print("Best parameters:", best_params)
+    print("Best score:", grid_search.best_score_)
+    print("Best model:", best_model)
 
-    lr_model = LogisticRegression()
-    lr_params = {
-        'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000],
-        'penalty': ['l1', 'l2'],
+    print('-------------------- Decision Tree网格搜索 --------------------')
+    param_grid = {
+        'criterion': ['gini', 'entropy'],
+        'max_depth': [None, 5, 10, 20],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4]
     }
-    lr_model = GridSearchCV(estimator=lr_model, param_grid=lr_params, scoring='accuracy', cv=10)  # precision recall f1
-    lr_model.fit(xtrain, ytrain)
-    print("LR_accuracy模型的最优参数：", lr_model.best_params_)
-    lr_best_model = lr_model.best_estimator_
-    lr_pred = lr_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, lr_pred), f1_score(ytest, lr_pred), recall_score(ytest, lr_pred)
-    print('LR precision on test:', prec)
-    print('LR f1 on test:', f1)
-    print('LR recall on test:', recall)
+    dt = DecisionTreeClassifier()
+    cv = 10
+    scoring = 'precision'
+    grid_search = GridSearchCV(dt, param_grid, cv=cv, scoring=scoring)
+    grid_search.fit(xtrain, ytrain)
+    best_model = grid_search.best_estimator_
+    best_params = grid_search.best_params_
+    print("Best parameters:", best_params)
+    print("Best score:", grid_search.best_score_)
+    print("Best model:", best_model)
 
-    lr_model = LogisticRegression()
-    lr_params = {
-        'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000],
-        'penalty': ['l1', 'l2'],
+
+    print('-------------------- Random Forest 网格搜索 --------------------')
+    param_grid = {
+        'n_estimators': [50, 100, 200, 300],
+        'criterion': ['gini', 'entropy'],
+        'max_depth': [None, 5, 10, 20],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4],
+        'max_features': ['sqrt', 'log2', None]
     }
-    lr_model = GridSearchCV(estimator=lr_model, param_grid=lr_params, scoring='f1', cv=10)  # precision recall f1
-    lr_model.fit(xtrain, ytrain)
-    print("LR_f1模型的最优参数：", lr_model.best_params_)
-    lr_best_model = lr_model.best_estimator_
-    lr_pred = lr_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, lr_pred), f1_score(ytest, lr_pred), recall_score(ytest, lr_pred)
-    print('LR precision on test:', prec)
-    print('LR f1 on test:', f1)
-    print('LR recall on test:', recall)
+    rfc = RandomForestClassifier()
+    cv = 10
+    scoring = 'precision'
+    grid_search = GridSearchCV(rfc, param_grid, cv=cv, scoring=scoring)
+    grid_search.fit(xtrain, ytrain)
+    best_model = grid_search.best_estimator_
+    best_params = grid_search.best_params_
+    print("Best parameters:", best_params)
+    print("Best score:", grid_search.best_score_)
+    print("Best model:", best_model)
 
-    lr_model = LogisticRegression()
-    lr_params = {
-        'C': [0.05, 0.1, 0.5, 0.75, 0.9, 1, 2, 10, 50, 100, 1000],
-        'penalty': ['l1', 'l2'],
+    print('-------------------- XGBoost 网格搜索 --------------------')
+    param_grid = {
+        'learning_rate': [0.01, 0.1, 1],
+        'max_depth': [3, 5, 7],
+        'n_estimators': [50, 100, 200],
+        'subsample': [0.5, 0.7, 1.0],
+        'colsample_bytree': [0.5, 0.7, 1.0],
     }
-    lr_model = GridSearchCV(estimator=lr_model, param_grid=lr_params, scoring='roc_auc', cv=10)  # precision recall f1
-    lr_model.fit(xtrain, ytrain)
-    print("LR_roc_auc模型的最优参数：", lr_model.best_params_)
-    lr_best_model = lr_model.best_estimator_
-    lr_pred = lr_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, lr_pred), f1_score(ytest, lr_pred), recall_score(ytest, lr_pred)
-    print('LR precision on test:', prec)
-    print('LR f1 on test:', f1)
-    print('LR recall on test:', recall)
-
-    print('-------------------- RandomForest网格搜索 --------------------')
-    lr_model = RandomForestClassifier()
-    lr_params = {
-        'max_depth': [3, 5, 10, None],
-        'n_estimators': [10, 50, 100, 200, 300],
-        'max_features': list(range(6, 50)),
-        'min_samples_leaf': [1, 2, 3],
-        'min_samples_split': [2, 3],
-        'criterion': ['gini', 'entropy']
-    }
-    lr_model = GridSearchCV(estimator=lr_model, param_grid=lr_params, scoring='precision', cv=10)  # precision recall f1
-    lr_model.fit(xtrain, ytrain)
-    print("RandomForest_precision模型的最优参数：", lr_model.best_params_)
-    lr_best_model = lr_model.best_estimator_
-    lr_pred = lr_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, lr_pred), f1_score(ytest, lr_pred), recall_score(ytest, lr_pred)
-    print('RF precision on test:', prec)
-    print('RF f1 on test:', f1)
-    print('RF recall on test:', recall)
-
-    lr_model = RandomForestClassifier()
-    lr_params = {
-        'max_depth': [3, 5, 10, None],
-        'n_estimators': [10, 50, 100, 200, 300],
-        'max_features': list(range(6, 50)),
-        'min_samples_leaf': [1, 2, 3],
-        'min_samples_split': [2, 3],
-        'criterion': ['gini', 'entropy']
-    }
-    lr_model = GridSearchCV(estimator=lr_model, param_grid=lr_params, scoring='accuracy', cv=10)  # precision recall f1
-    lr_model.fit(xtrain, ytrain)
-    print("RandomForest_accruracy模型的最优参数：", lr_model.best_params_)
-    lr_best_model = lr_model.best_estimator_
-    lr_pred = lr_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, lr_pred), f1_score(ytest, lr_pred), recall_score(ytest, lr_pred)
-    print('RF precision on test:', prec)
-    print('RF f1 on test:', f1)
-    print('RF recall on test:', recall)
-
-    lr_model = RandomForestClassifier()
-    lr_params = {
-        'max_depth': [3, 5, 10, None],
-        'n_estimators': [10, 50, 100, 200, 300],
-        'max_features': list(range(6, 50)),
-        'min_samples_leaf': [1, 2, 3],
-        'min_samples_split': [2, 3],
-        'criterion': ['gini', 'entropy']
-    }
-    lr_model = GridSearchCV(estimator=lr_model, param_grid=lr_params, scoring='f1', cv=10)  # precision recall f1
-    lr_model.fit(xtrain, ytrain)
-    print("RandomForest_f1模型的最优参数：", lr_model.best_params_)
-    lr_best_model = lr_model.best_estimator_
-    lr_pred = lr_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, lr_pred), f1_score(ytest, lr_pred), recall_score(ytest, lr_pred)
-    print('RF precision on test:', prec)
-    print('RF f1 on test:', f1)
-    print('RF recall on test:', recall)
-
-    lr_model = RandomForestClassifier()
-    lr_params = {
-        'max_depth': [3, 5, 10, None],
-        'n_estimators': [10, 50, 100, 200, 300],
-        'max_features': list(range(6, 50)),
-        'min_samples_leaf': [1, 2, 3],
-        'min_samples_split': [2, 3],
-        'criterion': ['gini', 'entropy']
-    }
-    lr_model = GridSearchCV(estimator=lr_model, param_grid=lr_params, scoring='roc_auc', cv=10)  # precision recall f1
-    lr_model.fit(xtrain, ytrain)
-    print("RandomForest_roc_auc模型的最优参数：", lr_model.best_params_)
-    lr_best_model = lr_model.best_estimator_
-    lr_pred = lr_best_model.predict(xtest)
-    prec, f1, recall = precision_score(ytest, lr_pred), f1_score(ytest, lr_pred), recall_score(ytest, lr_pred)
-    print('RF precision on test:', prec)
-    print('RF f1 on test:', f1)
-    print('RF recall on test:', recall)
-
-
-different_model()
+    xgb_clf = XGBClassifier(objective='binary:logistic')
+    cv = 10
+    scoring = 'precision'
+    grid_search = GridSearchCV(xgb_clf, param_grid, cv=cv, scoring=scoring)
+    grid_search.fit(xtrain, ytrain)
+    best_model = grid_search.best_estimator_
+    best_params = grid_search.best_params_
+    print("Best parameters:", best_params)
+    print("Best score:", grid_search.best_score_)
+    print("Best model:", best_model)
 
 
 def random_forest_pred():
-    rfc = RandomForestClassifier(n_estimators=100, criterion='gini', max_features='sqrt')
+    rfc = RandomForestClassifier()
     rfc = rfc.fit(xtrain, ytrain)
     print('------------feature_importances_--------------')
     importances = rfc.feature_importances_
     std = np.std([tree.feature_importances_ for tree in rfc.estimators_], axis=0)
     indices = np.argsort(importances)[::-1]
     print('feature ranking')
-    for f in range(min(20, xtrain.shape[1])):
+    for f in range(min(50, xtrain.shape[1])):
         print('%2d) %-*s %f' % (f + 1, 30, xtrain.columns[indices[f]], importances[indices[f]]))
     plt.figure()
     plt.title('feature importances')
@@ -394,5 +302,6 @@ def random_forest_pred():
     print('F1-score:', f1_score(ytest, predicted))
     print('Precision score:', precision_score(ytest, predicted))
 
+
 different_model()
-random_forest_pred()
+# random_forest_pred()
