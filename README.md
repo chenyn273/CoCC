@@ -25,7 +25,6 @@ This includes grid search, which takes a long time
 ## Classifier comparison and calibration
 Run /classifiers/main.py （RQ2 Java dataset)
 
-Run /python_exp/dect.py (RQ4 Python dataset)
 ## utils
 1.convert_co_CCSet，Tool used to generate CCSet from original commit
 
