@@ -243,11 +243,13 @@ def different_model():
     print("Best model:", best_model)
 
     print('-------------------- Random Forest 网格搜索 --------------------')
-    param_grid = {
+     param_grid = {
         'n_estimators': [50, 100, 200, 300],
+        'criterion': ['gini', 'entropy'],
         'max_depth': [None, 5, 10, 20],
         'min_samples_split': [2, 5, 10],
-        'min_samples_leaf': [1, 2, 4]
+        'min_samples_leaf': [1, 2, 4],
+        'max_features': ['sqrt', 'log2', None]
     }
     rfc = RandomForestClassifier()
     cv = 10
