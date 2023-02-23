@@ -178,7 +178,7 @@ def different_model():
     param_grid = {'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]}
     gnb = GaussianNB()
     cv = 10
-    scoring = 'precision'
+    scoring = 'accuracy'
     grid_search = GridSearchCV(gnb, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -195,7 +195,7 @@ def different_model():
     }
     lr = LogisticRegression()
     cv = 10
-    scoring = 'precision'
+    scoring = 'accuracy'
     grid_search = GridSearchCV(lr, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -213,7 +213,7 @@ def different_model():
     }
     dt = DecisionTreeClassifier()
     cv = 10
-    scoring = 'precision'
+    scoring = 'accuracy'
     grid_search = GridSearchCV(dt, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -233,7 +233,7 @@ def different_model():
     }
     xgb_clf = XGBClassifier(objective='binary:logistic')
     cv = 10
-    scoring = 'precision'
+    scoring = 'accuracy'
     grid_search = GridSearchCV(xgb_clf, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -251,7 +251,7 @@ def different_model():
     }
     rfc = RandomForestClassifier()
     cv = 10
-    scoring = 'precision'
+    scoring = 'accuracy'
     grid_search = GridSearchCV(rfc, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -266,7 +266,7 @@ def different_model():
                   'kernel': ['linear', 'rbf']}
     svc = SVC()
     cv = 10
-    scoring = 'precision'
+    scoring = 'accuracy'
     grid_search = GridSearchCV(svc, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
