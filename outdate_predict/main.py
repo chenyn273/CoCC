@@ -172,20 +172,7 @@ def different_model():
     print('RandomForest:\t', precision_score(ytest, rfc_pre), f1_score(ytest, rfc_pre), recall_score(ytest, rfc_pre))
     print('XGBoost:\t', precision_score(ytest, xgb_pre), f1_score(ytest, xgb_pre), recall_score(ytest, xgb_pre))
 
-    print('-------------------- SVM网格搜索 --------------------')
-    param_grid = {'C': [0.1, 1, 10, 100],
-                  'gamma': [0.1, 1, 10, 100],
-                  'kernel': ['linear', 'rbf']}
-    svc = SVC()
-    cv = 10
-    scoring = 'precision'
-    grid_search = GridSearchCV(svc, param_grid, cv=cv, scoring=scoring)
-    grid_search.fit(xtrain, ytrain)
-    best_model = grid_search.best_estimator_
-    best_params = grid_search.best_params_
-    print("Best parameters:", best_params)
-    print("Best score:", grid_search.best_score_)
-    print("Best model:", best_model)
+    
 
     print('-------------------- GaussianNB网格搜索 --------------------')
     param_grid = {'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]}
@@ -236,26 +223,6 @@ def different_model():
     print("Best model:", best_model)
 
 
-    print('-------------------- Random Forest 网格搜索 --------------------')
-    param_grid = {
-        'n_estimators': [50, 100, 200, 300],
-        'criterion': ['gini', 'entropy'],
-        'max_depth': [None, 5, 10, 20],
-        'min_samples_split': [2, 5, 10],
-        'min_samples_leaf': [1, 2, 4],
-        'max_features': ['sqrt', 'log2', None]
-    }
-    rfc = RandomForestClassifier()
-    cv = 10
-    scoring = 'precision'
-    grid_search = GridSearchCV(rfc, param_grid, cv=cv, scoring=scoring)
-    grid_search.fit(xtrain, ytrain)
-    best_model = grid_search.best_estimator_
-    best_params = grid_search.best_params_
-    print("Best parameters:", best_params)
-    print("Best score:", grid_search.best_score_)
-    print("Best model:", best_model)
-
     print('-------------------- XGBoost 网格搜索 --------------------')
     param_grid = {
         'learning_rate': [0.01, 0.1, 1],
@@ -275,7 +242,42 @@ def different_model():
     print("Best score:", grid_search.best_score_)
     print("Best model:", best_model)
 
-
+    print('-------------------- Random Forest 网格搜索 --------------------')
+    param_grid = {
+        'n_estimators': [50, 100, 200, 300],
+        'criterion': ['gini', 'entropy'],
+        'max_depth': [None, 5, 10, 20],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4],
+        'max_features': ['sqrt', 'log2', None]
+    }
+    rfc = RandomForestClassifier()
+    cv = 10
+    scoring = 'precision'
+    grid_search = GridSearchCV(rfc, param_grid, cv=cv, scoring=scoring)
+    grid_search.fit(xtrain, ytrain)
+    best_model = grid_search.best_estimator_
+    best_params = grid_search.best_params_
+    print("Best parameters:", best_params)
+    print("Best score:", grid_search.best_score_)
+    print("Best model:", best_model)
+    
+    print('-------------------- SVM网格搜索 --------------------')
+    param_grid = {'C': [0.1, 1, 10, 100],
+                  'gamma': [0.1, 1, 10, 100],
+                  'kernel': ['linear', 'rbf']}
+    svc = SVC()
+    cv = 10
+    scoring = 'precision'
+    grid_search = GridSearchCV(svc, param_grid, cv=cv, scoring=scoring)
+    grid_search.fit(xtrain, ytrain)
+    best_model = grid_search.best_estimator_
+    best_params = grid_search.best_params_
+    print("Best parameters:", best_params)
+    print("Best score:", grid_search.best_score_)
+    print("Best model:", best_model)
+    
+    
 def random_forest_pred():
     rfc = RandomForestClassifier()
     rfc = rfc.fit(xtrain, ytrain)
