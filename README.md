@@ -25,7 +25,7 @@ This includes grid search, which takes a long time.
 ## Classifier comparison and calibration
 Run */classifiers/main.py* （RQ2)
 
-## utils
+## Utils
 1.convert_co_CCSet, tools used to generate CCSet from original commit.
 
 2.get_change, tools for extracting changes from CCSet.
