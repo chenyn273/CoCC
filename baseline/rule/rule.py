@@ -1,8 +1,7 @@
 import pandas as pd
 
-pringt('block-type')
+print('block-type')
 rule = pd.read_csv("./b.csv")
-print(rule.head())
 
 label = rule.label
 sim = rule.cmt2cd_sim_change
@@ -17,15 +16,12 @@ for v in sim:
     else:
         pred.append(0)
 
-print(len(label))
-print(len(pred))
-
 TP = 0
 FP = 0
 TN = 0
 FN = 0
 
-for i in range(0,len(label)):
+for i in range(0, len(label)):
     if label[i] == 1 and pred[i] == 1:
         TP += 1
     if label[i] == 1 and pred[i] == 0:
@@ -41,10 +37,8 @@ print('pre:', TP / (TP + FP))
 print('recall:', TP / (TP + FN))
 print('f1', 2 * pre * recall / (pre + recall))
 
-
-pringt('method-type')
+print('method-type')
 rule = pd.read_csv("./m.csv")
-print(rule.head())
 
 label = rule.label
 sim = rule.cmt2cd_sim_change
@@ -59,15 +53,12 @@ for v in sim:
     else:
         pred.append(0)
 
-print(len(label))
-print(len(pred))
-
 TP = 0
 FP = 0
 TN = 0
 FN = 0
 
-for i in range(0,len(label)):
+for i in range(0, len(label)):
     if label[i] == 1 and pred[i] == 1:
         TP += 1
     if label[i] == 1 and pred[i] == 0:
@@ -83,10 +74,8 @@ print('pre:', TP / (TP + FP))
 print('recall:', TP / (TP + FN))
 print('f1', 2 * pre * recall / (pre + recall))
 
-
-pringt('B & M-type')
+print('B & M-type')
 rule = pd.read_csv("./b&m.csv")
-print(rule.head())
 
 label = rule.label
 sim = rule.cmt2cd_sim_change
@@ -101,15 +90,12 @@ for v in sim:
     else:
         pred.append(0)
 
-print(len(label))
-print(len(pred))
-
 TP = 0
 FP = 0
 TN = 0
 FN = 0
 
-for i in range(0,len(label)):
+for i in range(0, len(label)):
     if label[i] == 1 and pred[i] == 1:
         TP += 1
     if label[i] == 1 and pred[i] == 0:
