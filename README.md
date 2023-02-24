@@ -40,7 +40,7 @@ Run /classifiers/main.py （RQ2 Java dataset)
 
 7.word2vector, tools for training word vectors
 ## Baseline
-**rule based baseline：**
+**rule based baseline**
 Put the folder "features" in resource package in the CoCC code directory, and then run baseline/rule/rule.py
 
 **OCD**
