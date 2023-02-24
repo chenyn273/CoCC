@@ -26,19 +26,19 @@ This includes grid search, which takes a long time
 Run /classifiers/main.py （RQ2 Java dataset)
 
 ## utils
-1.convert_co_CCSet，Tool used to generate CCSet from original commit
+1.convert_co_CCSet, tools used to generate CCSet from original commit
 
-2.get_change，Tool for extracting changes from CCSet
+2.get_change, tools for extracting changes from CCSet
 
-3.extract_features，Tools for feature extraction
+3.extract_features, tools for feature extraction
 
-4.generate_table，Tools for generating csv files
+4.generate_table, tools for generating csv files
 
-5.data_analyse_tool，Tools for analyzing datasets
+5.data_analyse_tool, tools for analyzing datasets
 
-6.drop_duplicates_tool，Tool used to remove duplicates of original data
+6.drop_duplicates_tool, tools used to remove duplicates of original data
 
-7.word2vector，Tools for training word vectors
+7.word2vector, tools for training word vectors
 ## Baseline
 **rule based baseline：**
 Put the folder "features" in resource package in the CoCC code directory, and then run baseline/rule/rule.py
