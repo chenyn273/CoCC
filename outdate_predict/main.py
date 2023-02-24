@@ -140,12 +140,13 @@ xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size=0.3, random_stat
 
 
 def different_model():
-    nbc = GaussianNB()
+    nbc = GaussianNB(var_smoothing=1e-5)
     svmc = SVC()
-    lrc = LogisticRegression()
-    dtc = DecisionTreeClassifier()
+    lrc = LogisticRegression(penalty='l1', C=100, solver='liblinear')
+    dtc = DecisionTreeClassifier(criterion='gini', max_depth=20, min_samples_split=5, min_samples_leaf=1)
     rfc = RandomForestClassifier()
-    xgb = XGBClassifier(objective='binary:logistic')
+    xgb = XGBClassifier(objective='binary:logistic', learning_rate=1, max_depth=7, n_estimators=200, subsample=1,
+                        colsample_bytree=1)
 
     nbc.fit(xtrain, ytrain)
     svmc.fit(xtrain, ytrain)
@@ -161,7 +162,7 @@ def different_model():
     rfc_pre = rfc.predict(xtest)
     xgb_pre = xgb.predict(xtest)
 
-    print('-------------------- 默认参数 --------------------')
+    print('-------------------- best performance --------------------')
     print('precision, f1, recall')
     print('NaiveBayes:\t', precision_score(ytest, nbc_pre), f1_score(ytest, nbc_pre), recall_score(ytest, nbc_pre))
     # print('KNN:\t', precision_score(ytest, knnc_pre), f1_score(ytest, knnc_pre), recall_score(ytest, knnc_pre))
