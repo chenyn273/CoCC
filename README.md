@@ -44,7 +44,7 @@ Run */classifiers/main.py* （RQ2)
 put the folder "features" in resource package in the CoCC code directory, and then run *baseline/rule/rule.py*
 
 **OCD,**
-open the *CoCC/baseline/OCD* folder, and unzip OCD.zip and ocd_data.zip to the current directory, and then run the follow in the command line
+open the *CoCC/baseline/OCD* folder, and unzip OCD.zip and ocd_data.zip to the current directory, and then run the follow in the command line.
 ```python
 python -m infer --log-dir OCD --config configs/OCD.yml
 
