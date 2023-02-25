@@ -144,7 +144,7 @@ def different_model():
     svmc = SVC()
     lrc = LogisticRegression(penalty='l1', C=100, solver='liblinear')
     dtc = DecisionTreeClassifier(criterion='gini', max_depth=20, min_samples_split=5, min_samples_leaf=1)
-    rfc = RandomForestClassifier()
+    rfc = RandomForestClassifier(criterion='gini', max_depth=None, max_features='sqrt', min_samples_leaf=1, min_samples_split=2, n_estimators=200)
     xgb = XGBClassifier(objective='binary:logistic', learning_rate=1, max_depth=7, n_estimators=200, subsample=1,
                         colsample_bytree=1)
 
@@ -179,7 +179,7 @@ def different_model():
     param_grid = {'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]}
     gnb = GaussianNB()
     cv = 10
-    scoring = 'accuracy'
+    scoring = 'f1'
     grid_search = GridSearchCV(gnb, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -196,7 +196,7 @@ def different_model():
     }
     lr = LogisticRegression()
     cv = 10
-    scoring = 'accuracy'
+    scoring = 'f1'
     grid_search = GridSearchCV(lr, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -214,7 +214,7 @@ def different_model():
     }
     dt = DecisionTreeClassifier()
     cv = 10
-    scoring = 'accuracy'
+    scoring = 'f1'
     grid_search = GridSearchCV(dt, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -234,7 +234,7 @@ def different_model():
     }
     xgb_clf = XGBClassifier(objective='binary:logistic')
     cv = 10
-    scoring = 'accuracy'
+    scoring = 'f1'
     grid_search = GridSearchCV(xgb_clf, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -254,7 +254,7 @@ def different_model():
     }
     rfc = RandomForestClassifier()
     cv = 10
-    scoring = 'accuracy'
+    scoring = 'f1'
     grid_search = GridSearchCV(rfc, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -269,7 +269,7 @@ def different_model():
                   'kernel': ['linear', 'rbf']}
     svc = SVC()
     cv = 10
-    scoring = 'accuracy'
+    scoring = 'f1'
     grid_search = GridSearchCV(svc, param_grid, cv=cv, scoring=scoring)
     grid_search.fit(xtrain, ytrain)
     best_model = grid_search.best_estimator_
@@ -280,7 +280,7 @@ def different_model():
     
     
 def random_forest_pred():
-    rfc = RandomForestClassifier()
+    rfc = RandomForestClassifier(criterion='gini', max_depth=None, max_features='sqrt', min_samples_leaf=1, min_samples_split=2, n_estimators=200)
     rfc = rfc.fit(xtrain, ytrain)
     print('------------feature_importances_--------------')
     importances = rfc.feature_importances_
